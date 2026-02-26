@@ -6,11 +6,11 @@ import time
 import io
 
 # ==========================================
-# 1. 核心配置与云数据库连接
+# 1. 核心配置与云数据库连接 (使用 Streamlit Secrets 保护)
 # ==========================================
-# 请在此处填写您在 Supabase 后台 API 设置中获取的参数
-SUPABASE_URL = "https://liangshengshi1-ops's Org.supabase.co"
-SUPABASE_KEY = "lnlmriwaiznsbmdnenlv"
+# 让程序去云端的安全环境变量中读取，防止密码泄露
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
 @st.cache_resource
 def init_connection():
@@ -206,3 +206,4 @@ elif menu == "任务/参数布置":
         if cfg_data.data:
 
             st.table(pd.DataFrame(cfg_data.data)[['type', 'value']])
+
