@@ -9,9 +9,8 @@ import io
 # 1. 核心配置与云数据库连接 (使用 Streamlit Secrets 保护)
 # ==========================================
 # 让程序去云端的安全环境变量中读取，防止密码泄露
-SUPABASE_URL = st.secrets["https://lwxlyinekziylfujscqd.supabase.co"]
-SUPABASE_KEY = st.secrets["sb_publishable_Sia-RhW-wApZ1McliX_cjw_K4iOw5MA"]
-
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 @st.cache_resource
 def init_connection():
     """初始化数据库连接，使用缓存避免重复连接"""
@@ -206,5 +205,6 @@ elif menu == "任务/参数布置":
         if cfg_data.data:
 
             st.table(pd.DataFrame(cfg_data.data)[['type', 'value']])
+
 
 
