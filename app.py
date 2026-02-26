@@ -161,7 +161,32 @@ elif menu == "管理后台监控":
                         if st.button("❌ 驳回纠偏", key=f"fail_{row['id']}"):
                             supabase.table("weld_records").update({"audit_status": "🚫 已驳回", "is_alert": False}).eq("id", row['id']).execute()
                             st.rerun()
-
+# 在管理后台监控模块中
+if res.data:
+    df = pd.DataFrame(res.data)
+    
+    # 按照重要性排序显示的列（可以自定义）
+    display_order = [
+        'weld_date', 'area', 'drawing_no', 'weld_no', 
+        'welder_code', 'team_leader', 'audit_status'
+    ]
+    
+    st.subheader("📊 实时施工概览")
+    # 只显示关键核心字段，避免页面太宽
+    st.dataframe(df[display_order], use_container_width=True)
+    
+    # 详情查看器：点击某一行查看完整 15+ 字段
+    st.info("💡 提示：点击下方表格中的具体行，或直接导出 Excel 查看完整 15 项参数。")
+    
+    # 下载按钮
+    buffer = io.BytesIO()
+    df.to_excel(buffer, index=False)
+    st.download_button(
+        label="📥 导出全要素焊接记录 (Excel)",
+        data=buffer.getvalue(),
+        file_name=f"焊接质量档案_{datetime.now().strftime('%Y%m%d')}.xlsx"
+    )
+    
         # --- 全量历史档案 ---
         st.divider()
         st.subheader("📂 完整施工记录档案")
@@ -206,6 +231,7 @@ elif menu == "任务/参数布置":
         if cfg_data.data:
 
             st.table(pd.DataFrame(cfg_data.data)[['type', 'value']])
+
 
 
 
